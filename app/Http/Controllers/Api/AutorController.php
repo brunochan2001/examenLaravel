@@ -13,7 +13,7 @@ class AutorController extends Controller
      */
     public function index()
     {
-        $autores = Autor::all();
+        $autores = Autor::with('libros')->get();
 
         return response()->json($autores, 200);
     }
@@ -28,13 +28,24 @@ class AutorController extends Controller
             'apellido'         => 'required|string|max:255',
             'nacionalidad'     => 'nullable|string|max:255',
             'fecha_nacimiento' => 'nullable|date',
+            'libro_ids'        => 'nullable|array',
+            'libro_ids.*'      => 'exists:libros,id',
         ]);
 
-        $autor = Autor::create($request->all());
+        $autor = Autor::create($request->only([
+            'nombre',
+            'apellido',
+            'nacionalidad',
+            'fecha_nacimiento'
+        ]));
+
+        if ($request->filled('libro_ids')) {
+            $autor->libros()->attach($request->libro_ids);
+        }
 
         return response()->json([
             'message' => 'Autor registrado correctamente',
-            'data'    => $autor,
+            'data' => $autor->load('libros')
         ], 201);
     }
 
@@ -43,7 +54,7 @@ class AutorController extends Controller
      */
     public function show(string $id)
     {
-        $autor = Autor::find($id);
+        $autor = Autor::with('libros')->find($id);
 
         if (!$autor) {
             return response()->json([
@@ -72,13 +83,24 @@ class AutorController extends Controller
             'apellido'         => 'required|string|max:255',
             'nacionalidad'     => 'nullable|string|max:255',
             'fecha_nacimiento' => 'nullable|date',
+            'libro_ids'        => 'nullable|array',
+            'libro_ids.*'      => 'exists:libros,id',
         ]);
 
-        $autor->update($request->all());
+        $autor->update($request->only([
+            'nombre',
+            'apellido',
+            'nacionalidad',
+            'fecha_nacimiento'
+        ]));
+
+        if ($request->has('libro_ids')) {
+            $autor->libros()->sync($request->libro_ids);
+        }
 
         return response()->json([
             'message' => 'Autor actualizado correctamente',
-            'data'    => $autor,
+            'data' => $autor->load('libros')
         ], 200);
     }
 

@@ -13,11 +13,11 @@ class LibroController extends Controller
      */
     public function index()
     {
-        $libros = Libro::all();
+        $libros = Libro::with('autores')->get();
 
         return response()->json($libros, 200);
     }
-
+    
     /**
      * Store a newly created resource in storage.
      */
@@ -30,13 +30,25 @@ class LibroController extends Controller
             'stock'             => 'required|integer',
             'fecha_publicacion' => 'required|date',
             'idioma'            => 'required|string|max:100',
+            'autor_ids'         => 'required|array|min:1',
+            'autor_ids.*'       => 'exists:autores,id',
         ]);
 
-        $libro = Libro::create($request->all());
+        $libro = Libro::create($request->only([
+            'titulo',
+            'descripcion',
+            'paginas',
+            'stock',
+            'fecha_publicacion',
+            'idioma'
+        ]));
+
+
+        $libro->autores()->attach($request->autor_ids);
 
         return response()->json([
             'message' => 'Libro registrado correctamente',
-            'data'    => $libro,
+            'data' => $libro->load('autores')
         ], 201);
     }
 
@@ -45,7 +57,7 @@ class LibroController extends Controller
      */
     public function show(string $id)
     {
-        $libro = Libro::find($id);
+        $libro = Libro::with('autores')->find($id);
 
         if (!$libro) {
             return response()->json([
@@ -76,13 +88,24 @@ class LibroController extends Controller
             'stock'             => 'required|integer',
             'fecha_publicacion' => 'required|date',
             'idioma'            => 'required|string|max:100',
+            'autor_ids'         => 'required|array|min:1',
+            'autor_ids.*'       => 'exists:autores,id',
         ]);
 
-        $libro->update($request->all());
+        $libro->update($request->only([
+            'titulo',
+            'descripcion',
+            'paginas',
+            'stock',
+            'fecha_publicacion',
+            'idioma'
+        ]));
+
+        $libro->autores()->sync($request->autor_ids);
 
         return response()->json([
             'message' => 'Libro actualizado correctamente',
-            'data'    => $libro,
+            'data' => $libro->load('autores')
         ], 200);
     }
 

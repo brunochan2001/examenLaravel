@@ -21,4 +21,14 @@ class Autor extends Model
     protected $casts = [
         'fecha_nacimiento' => 'date',
     ];
+
+    public function libros()
+    {
+        return $this->belongsToMany(
+            Libro::class,
+            'autorias',
+            'autor_id',
+            'libro_id'
+        );
+    }
 }

@@ -25,4 +25,14 @@ class Libro extends Model
         'paginas'           => 'integer',
         'stock'             => 'integer',
     ];
+
+    public function autores()
+    {
+        return $this->belongsToMany(
+            Autor::class,
+            'autorias',
+            'libro_id',
+            'autor_id'
+        );
+    }
 }
