@@ -15,10 +15,7 @@ class LibroController extends Controller
     {
         $libros = Libro::all();
 
-        return response()->json([
-            'success' => true,
-            'data'    => $libros,
-        ], 200);
+        return response()->json($libros, 200);
     }
 
     /**
@@ -29,16 +26,16 @@ class LibroController extends Controller
         $request->validate([
             'titulo'            => 'required|string|max:255',
             'descripcion'       => 'nullable|string',
-            'paginas'           => 'nullable|integer',
-            'stock'             => 'nullable|integer',
-            'fecha_publicacion' => 'nullable|date',
-            'idioma'            => 'nullable|string|max:100',
+            'paginas'           => 'required|integer',
+            'stock'             => 'required|integer',
+            'fecha_publicacion' => 'required|date',
+            'idioma'            => 'required|string|max:100',
         ]);
 
         $libro = Libro::create($request->all());
 
         return response()->json([
-            'success' => true,
+            'message' => 'Libro registrado correctamente',
             'data'    => $libro,
         ], 201);
     }
@@ -48,7 +45,15 @@ class LibroController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $libro = Libro::find($id);
+
+        if (!$libro) {
+            return response()->json([
+                'message' => 'Libro no encontrado'
+            ], 404);
+        }
+
+        return response()->json($libro, 200);
     }
 
     /**
@@ -56,7 +61,29 @@ class LibroController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $libro = Libro::find($id);
+
+        if (!$libro) {
+            return response()->json([
+                'message' => 'Libro no encontrado'
+            ], 404);
+        }
+
+        $request->validate([
+            'titulo'            => 'required|string|max:255',
+            'descripcion'       => 'nullable|string',
+            'paginas'           => 'required|integer',
+            'stock'             => 'required|integer',
+            'fecha_publicacion' => 'required|date',
+            'idioma'            => 'required|string|max:100',
+        ]);
+
+        $libro->update($request->all());
+
+        return response()->json([
+            'message' => 'Libro actualizado correctamente',
+            'data'    => $libro,
+        ], 200);
     }
 
     /**
@@ -64,6 +91,18 @@ class LibroController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $libro = Libro::find($id);
+
+        if (!$libro) {
+            return response()->json([
+                'message' => 'Libro no encontrado'
+            ], 404);
+        }
+
+        $libro->delete();
+
+        return response()->json([
+            'message' => 'Libro eliminado correctamente'
+        ], 200);
     }
 }
