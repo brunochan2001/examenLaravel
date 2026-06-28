@@ -1,59 +1,58 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📚 Sistema de Biblioteca
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema en Laravel para gestionar libros, autores y la relación entre ambos (autorías), con autenticación de usuarios.
 
-## About Laravel
+## 🚀 Cómo correr el proyecto localmente
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/brunochan2001/examenLaravel.git
+cd examenLaravel
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# 2. Instalar dependencias de PHP
+composer install
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# 3. Instalar dependencias de JS
+npm install
 
-## Learning Laravel
+# 4. Configurar variables de entorno
+cp .env.example .env
+php artisan key:generate
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+# 6. Ejecutar migraciones
+php artisan migrate
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# 7. Levantar el servidor
+php artisan serve
 
-## Laravel Sponsors
+# 8. Ejecutar Vite
+npm run dev
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Luego abre en el navegador:
 
-### Premium Partners
+```
+http://127.0.0.1:8000
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Regístrate o inicia sesión para acceder a las secciones de **Libros**, **Autores** y **Autorías**.
 
-## Contributing
+## 🗂️ Tablas del sistema
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **Autores**: registra a los autores (nombre, apellido, nacionalidad, fecha de nacimiento) y los libros que han escrito.
+- **Libros**: registra el catálogo de libros (título, descripción, páginas, stock, idioma) y sus autores.
+- **Autorías**: tabla de relación entre `autores` y `libros` (muchos a muchos), indicando qué autor escribió qué libro.
 
-## Code of Conduct
+## 🖼️ Vistas del sistema
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Libros
 
-## Security Vulnerabilities
+![Vista de Libros](https://i.postimg.cc/sgCBdrMN/Screenshot-2026-06-27-195139.png)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Autores
 
-## License
+![Vista de Autores](https://i.postimg.cc/JzCyVLsF/Screenshot-2026-06-27-195145.png)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Autorías
+
+![Vista de Autorías](https://i.postimg.cc/3xQy5Tk6/Screenshot-2026-06-27-195152.png)
