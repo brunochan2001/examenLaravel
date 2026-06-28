@@ -13,12 +13,12 @@ class Autoria extends Model
         'libro_id',
     ];
 
-    public function autores()
+    public function autor()
     {
         return $this->belongsTo(Autor::class);
     }
 
-    public function libros()
+    public function libro()
     {
         return $this->belongsTo(Libro::class);
     }
