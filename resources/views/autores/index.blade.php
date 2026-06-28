@@ -4,6 +4,9 @@
 
     <div class="container">
         <h1>Autores</h1>
+        <p class="text-muted">
+            Listado de autores registrados, con su nacionalidad, fecha de nacimiento y los libros que han escrito.
+        </p>
         <table class="table">
             <thead>
                 <tr>

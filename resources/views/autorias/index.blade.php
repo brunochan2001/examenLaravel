@@ -4,6 +4,9 @@
 
     <div class="container">
         <h1>Autorías</h1>
+        <p class="text-muted">
+            Esta sección muestra la <strong>relación entre autores y libros</strong>: indica qué autor escribió cada libro, permitiendo que un libro tenga varios autores y un autor tenga varios libros.
+        </p>
         <table class="table">
             <thead>
                 <tr>

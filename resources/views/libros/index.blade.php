@@ -4,6 +4,9 @@
 
     <div class="container">
         <h1>Libros</h1>
+        <p class="text-muted">
+            Catálogo de libros registrados en la biblioteca, con su descripción, cantidad de páginas, stock disponible e idioma.
+        </p>
         <table class="table">
             <thead>
                 <tr>
