@@ -35,4 +35,9 @@ class Libro extends Model
             'autor_id'
         );
     }
+
+    public function reservas()
+    {
+        return $this->hasMany(Reserva::class, 'libro_id');
+    }
 }

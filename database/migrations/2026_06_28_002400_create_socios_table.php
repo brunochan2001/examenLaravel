@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('socios', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+            $table->string('apellido');
+            $table->string('dni')->unique();
+            $table->string('email')->nullable();
+            $table->string('telefono')->nullable();
             $table->timestamps();
         });
     }

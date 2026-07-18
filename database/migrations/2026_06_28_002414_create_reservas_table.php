@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('reservas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('socio_id')->constrained('socios')->onDelete('cascade');
+            $table->foreignId('libro_id')->constrained('libros')->onDelete('cascade');
+            $table->date('fecha_reserva');
+            $table->date('fecha_devolucion')->nullable();
+            $table->enum('estado', ['pendiente', 'devuelta'])->default('pendiente');
             $table->timestamps();
         });
     }
