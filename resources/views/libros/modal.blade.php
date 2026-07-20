@@ -22,13 +22,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="descripcion" class="form-label">Descripción</label>
-                        <textarea
-                            class="form-control"
-                            id="descripcion"
-                            name="descripcion"
-                            rows="3"
-                            placeholder="Descripción del libro">
-                        </textarea>
+                        <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="paginas" class="form-label">Páginas</label>

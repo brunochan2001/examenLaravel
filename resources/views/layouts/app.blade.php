@@ -52,7 +52,7 @@
                             <a class="nav-link" href="{{ url('/socios') }}">{{ __('Socios') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/Reservas') }}">{{ __('Reservas') }}</a>
+                            <a class="nav-link" href="{{ url('/reservas') }}">{{ __('Reservas') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/autorias') }}">{{ __('Autorias') }}</a>

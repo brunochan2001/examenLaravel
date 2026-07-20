@@ -16,11 +16,9 @@ Route::get('/libros', function () {
     return view('libros.index');
 });
 
-
 Route::get('/autores', function () {
     return view('autores.index');
 });
-
 
 Route::get('/autorias', function () {
     return view('autorias.index');
@@ -28,4 +26,8 @@ Route::get('/autorias', function () {
 
 Route::get('/socios', function () {
     return view('socios.index');
+});
+
+Route::get('/reservas', function () {
+    return view('reservas.index');
 });

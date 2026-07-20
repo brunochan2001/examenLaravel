@@ -13,7 +13,11 @@ class SocioController extends Controller
      */
     public function index()
     {
-        $socios = Socio::with('reservas')->get();
+        $socios = Socio::with([
+            'reservas' => function ($query) {
+                $query->where('estado', 'pendiente');
+            }
+        ])->get();
 
         return response()->json($socios, 200);
     }
