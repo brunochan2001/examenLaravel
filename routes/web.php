@@ -12,16 +12,20 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::get('/libros', function(){
+Route::get('/libros', function () {
     return view('libros.index');
 });
 
 
-Route::get('/autores', function(){
+Route::get('/autores', function () {
     return view('autores.index');
 });
 
 
-Route::get('/autorias', function(){
+Route::get('/autorias', function () {
     return view('autorias.index');
+});
+
+Route::get('/socios', function () {
+    return view('socios.index');
 });
