@@ -82,6 +82,40 @@
     };
 
     // ============================
+    // MANEJO DE ERRORES API
+    // ============================
+    const Alertas = {
+
+        async errorValidacion(response) {
+
+            const error = await response.json();
+            let mensajes = '';
+
+            if (error.errors) {
+                Object.values(error.errors).forEach(campo => {
+                    mensajes += `• ${campo[0]}<br>`;
+                });
+            } else {
+                mensajes = error.message ?? 'Ocurrió un error inesperado';
+            }
+
+            Swal.fire({
+                title: "Error de validación",
+                html: mensajes,
+                icon: "error"
+            });
+        },
+
+        success(message) {
+            Swal.fire({
+                title: "Correcto",
+                text: message,
+                icon: "success"
+            });
+        }
+    };
+
+    // ============================
     // LISTAR RESERVAS
     // ============================
     async function listarReservas() {
@@ -280,8 +314,6 @@
                     await reservaServicios.actualizar(id, data) :
                     await reservaServicios.crear(data);
 
-                const resultado = await response.json();
-
                 if (response.ok) {
                     this.reset();
                     bootstrap.Modal
@@ -290,6 +322,8 @@
                         )
                         .hide();
                     await listarReservas();
+                } else {
+                    await Alertas.errorValidacion(response);
                 }
             } catch (error) {
                 console.log(error);
