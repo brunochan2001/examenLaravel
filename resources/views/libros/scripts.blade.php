@@ -1,35 +1,34 @@
 <script>
-    const API_AUTOR = '/api/autores'
+    const API_LIBRO = '/api/libros'
 
     // ============================
     // SERVICIOS API
     // ============================
-    const autorServicios = {
+    const libroServicios = {
 
         async obtenerTodos() {
-            const response = await fetch(API_AUTOR);
+            const response = await fetch(API_LIBRO);
             return await response.json();
         },
 
         async obtenerPorId(id) {
-            const response = await fetch(`${API_AUTOR}/${id}`);
+            const response = await fetch(`${API_LIBRO}/${id}`);
             return await response.json();
         },
 
         async crear(data) {
-            return await fetch(API_AUTOR, {
+            return await fetch(API_LIBRO, {
                 method: "POST",
                 headers: {
                     "Accept": "application/json"
                 },
                 body: data
             });
-
         },
 
         async actualizar(id, data) {
             data.append("_method", "PUT");
-            return await fetch(`${API_AUTOR}/${id}`, {
+            return await fetch(`${API_LIBRO}/${id}`, {
                 method: "POST",
                 headers: {
                     "Accept": "application/json"
@@ -39,7 +38,7 @@
         },
 
         async eliminar(id) {
-            return await fetch(`${API_AUTOR}/${id}`, {
+            return await fetch(`${API_LIBRO}/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Accept": "application/json"
@@ -48,10 +47,11 @@
         },
     };
 
-    const libroServicios = {
+
+    const autorServicios = {
 
         async obtenerTodos() {
-            const response = await fetch('/api/libros');
+            const response = await fetch('/api/autores');
             return await response.json();
         }
     };
@@ -75,45 +75,45 @@
     };
 
     // ============================
-    // LISTAR AUTORES
+    // LISTAR LIBROS
     // ============================
-    async function listarAutores() {
+    async function listarLibros() {
         try {
             Loading.show();
 
-            const autores = await autorServicios.obtenerTodos();
-            const bodyAutores = document.getElementById('tbody-autores');
+            const libros = await libroServicios.obtenerTodos();
+            const bodyLibros = document.getElementById('tbody-libros');
 
-            const html = autores.map(autor => {
-                let tituloLibros = autor.libros.length > 0 ?
-                    autor.libros.map(libro => libro.titulo).join(', ') :
-                    '-'
-                let fechaNacimiento = autor.fecha_nacimiento ?
-                    autor.fecha_nacimiento.substring(0, 10).split('-').reverse().join('/') :
+            const html = libros.map(libro => {
+                let nombresAutores = libro.autores.length > 0 ?
+                    libro.autores.map(autor => `${autor.nombre} ${autor.apellido}`).join(', ') :
                     '-';
 
                 return `
                 <tr>
                     <td>
-                        ${autor.nombre}
+                        ${libro.titulo}
                     </td>
                     <td>
-                        ${autor.apellido}
+                        ${libro.descripcion ?? '-'}
                     </td>
                     <td>
-                        ${autor.nacionalidad ?? '-'}
+                        ${libro.paginas ?? '-'}
                     </td>
                     <td>
-                        ${fechaNacimiento}
+                        ${libro.stock ?? '-'}
                     </td>
                     <td>
-                        ${tituloLibros}
+                        ${libro.idioma ?? '-'}
                     </td>
                     <td>
-                        <button class="btn btn-primary btn-sm" title="Editar" onclick="editarAutor(${autor.id})">
+                        ${nombresAutores}
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" title="Editar" onclick="editarLibro(${libro.id})">
                             <i class="bi bi-pencil-fill"></i>
                         </button>
-                        <button class="btn btn-danger btn-sm" title="Eliminar" onclick="eliminarAutor(${autor.id})">
+                        <button class="btn btn-danger btn-sm" title="Eliminar" onclick="eliminarLibro(${libro.id})">
                             <i class="bi bi-trash-fill"></i>
                         </button>
                     </td>
@@ -121,32 +121,33 @@
             `
             }).join('');
 
-            bodyAutores.innerHTML = html
+            bodyLibros.innerHTML = html
+
         } catch (error) {
             console.log(error)
         } finally {
             Loading.hide();
         }
-
-
     }
 
     // ============================
-    // LISTAR LIBROS
+    // LISTAR AUTORES
     // ============================
-    async function listarLibros(selectedIds = []) {
-        const select = $('#libro_ids');
-        const libros = await libroServicios.obtenerTodos();
+    async function listarAutores(selectedIds = []) {
+        const select = $('#autor_ids');
+        const autores = await autorServicios.obtenerTodos();
 
         select.empty();
 
-        libros.forEach(libro => {
+        autores.forEach(autor => {
+
             const option = new Option(
-                libro.titulo,
-                libro.id,
+                `${autor.nombre} ${autor.apellido}`,
+                autor.id,
                 false,
-                selectedIds.includes(libro.id)
+                selectedIds.includes(autor.id)
             );
+
             select.append(option);
         });
 
@@ -154,17 +155,17 @@
     }
 
     // ============================
-    // NUEVO AUTOR
+    // NUEVO LIBRO
     // ============================
-    async function nuevoAutor() {
+    async function nuevoLibro() {
         try {
             Loading.show();
 
-            document.getElementById('tituloModal').textContent = 'Nuevo Autor'
-            document.getElementById('formAutor').reset()
+            document.getElementById('tituloModalLibro').textContent = 'Nuevo Libro'
+            document.getElementById('formLibro').reset()
             document.getElementById("id").value = "";
 
-            await listarLibros();
+            await listarAutores();
         } catch (error) {
             console.log(error)
         } finally {
@@ -173,41 +174,42 @@
     }
 
     // ============================
-    // EDITAR AUTOR
+    // EDITAR LIBRO
     // ============================
-    async function editarAutor(id) {
+    async function editarLibro(id) {
         try {
             Loading.show();
 
-            new bootstrap.Modal(document.getElementById('modalAutor')).show();
+            new bootstrap.Modal(document.getElementById('modalLibro')).show();
 
-            const autor = await autorServicios.obtenerPorId(id);
+            const libro = await libroServicios.obtenerPorId(id);
 
-            document.getElementById('id').value = autor.id;
-            document.getElementById('nombre').value = autor.nombre;
-            document.getElementById('apellido').value = autor.apellido;
-            document.getElementById('nacionalidad').value = autor.nacionalidad ?? '';
-            document.getElementById('fecha_nacimiento').value = autor.fecha_nacimiento ?
-                autor.fecha_nacimiento.substring(0, 10) :
+            document.getElementById('id').value = libro.id;
+            document.getElementById('titulo').value = libro.titulo;
+            document.getElementById('descripcion').value = libro.descripcion ?? '';
+            document.getElementById('paginas').value = libro.paginas;
+            document.getElementById('stock').value = libro.stock;
+            document.getElementById('fecha_publicacion').value = libro.fecha_publicacion ?
+                libro.fecha_publicacion.substring(0, 10) :
                 '';
-            document.getElementById('tituloModal').textContent = 'Editar Autor';
+            document.getElementById('idioma').value = libro.idioma ?? '';
+            document.getElementById('tituloModalLibro').textContent = 'Editar Libro';
 
-            const librosSeleccionados = autor.libros.map(libro => libro.id);
+            const autoresSeleccionados = libro.autores.map(autor => autor.id);
 
-            await listarLibros(librosSeleccionados);
+            await listarAutores(autoresSeleccionados);
         } catch (error) {
             console.log(error)
         } finally {
             Loading.hide();
         }
-
-
     }
 
+
     // ============================
-    // ELIMINAR AUTOR
+    // ELIMINAR LIBRO
     // ============================
-    async function eliminarAutor(id) {
+    async function eliminarLibro(id) {
         const result = await Swal.fire({
             title: "¿Estás seguro(a)?",
             text: "¡No podrás revertir esto!",
@@ -226,10 +228,10 @@
         try {
             Loading.show();
 
-            const response = await autorServicios.eliminar(id);
+            const response = await libroServicios.eliminar(id);
             const resultado = await response.json();
 
-            await listarAutores();
+            await listarLibros();
 
             Swal.fire({
                 title: "¡Eliminado!",
@@ -243,11 +245,12 @@
         }
     }
 
+
     // ============================
     // FORMULARIO CREAR / ACTUALIZAR
     // ============================
     document
-        .getElementById("formAutor")
+        .getElementById("formLibro")
         .addEventListener("submit", async function(e) {
             e.preventDefault();
 
@@ -257,24 +260,24 @@
                 const id = document.getElementById("id").value;
                 const data = new FormData(this);
 
-                const libros = data.getAll('libro_ids[]');
+                const autores = data.getAll('autor_ids[]');
 
-                if (libros.includes('none') || libros.length === 0) {
-                    data.append('libro_ids', []);
+                if (autores.includes('none') || autores.length === 0) {
+                    data.append('autor_ids[]', []);
                 }
 
                 const response = id ?
-                    await autorServicios.actualizar(id, data) :
-                    await autorServicios.crear(data);
+                    await libroServicios.actualizar(id, data) :
+                    await libroServicios.crear(data);
 
                 if (response.ok) {
                     this.reset();
                     bootstrap.Modal
                         .getOrCreateInstance(
-                            document.getElementById("modalAutor")
+                            document.getElementById("modalLibro")
                         )
                         .hide();
-                    await listarAutores();
+                    await listarLibros();
                 }
             } catch (error) {
                 console.log(error)
@@ -288,18 +291,18 @@
     // ============================
     document.addEventListener(
         'DOMContentLoaded',
-        listarAutores()
+        listarLibros()
     )
 
     // ============================
-    // SELECT2 PARA LIBROS
+    // SELECT2 PARA AUTORES
     // ============================
     document.addEventListener('DOMContentLoaded', () => {
-        $('#libro_ids').select2({
-            placeholder: 'Seleccione libros',
+        $('#autor_ids').select2({
+            placeholder: 'Seleccione autores',
             allowClear: true,
             width: '100%',
-            dropdownParent: $('#modalAutor')
+            dropdownParent: $('#modalLibro')
         });
     });
 </script>
