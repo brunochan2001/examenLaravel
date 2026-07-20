@@ -1,74 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <div class="container">
-        <h1>Autorías</h1>
-        <p class="text-muted">
-            Esta sección muestra la <strong>relación entre autores y libros</strong>: indica qué autor escribió cada libro, permitiendo que un libro tenga varios autores y un autor tenga varios libros.
-        </p>
-        <table class="table">
-            <thead>
-                <tr>
-                <th scope="col">Autor</th>
-                <th scope="col">Nacionalidad</th>
-                <th scope="col">Libro</th>
-                <th scope="col">Idioma</th>
-                <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tbody-autorias">
-                
-            </tbody>
-        </table>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+            <h1 class="mb-0">Autorías</h1>
+        </div>
+        <div>
+            <button class="btn btn-success btn-sm" title="Agregar Autoría" onclick="nuevoAutoria()" data-bs-toggle="modal" data-bs-target="#modalAutoria">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+        </div>
     </div>
+    <div class="border rounded-3 shadow-sm p-3 bg-white">
+        @include('autorias.tabla')
+    </div>
+</div>
 
-    <script>
-        const API = '/api/autorias'
+@include('autorias.modal')
+@endsection
 
-        document.addEventListener(
-            'DOMContentLoaded',
-            cargarAutorias()
-        )
-
-        async function cargarAutorias(){
-            const response = await fetch(API)
-
-            const autorias = await response.json()
-
-            let bodyAutorias = document.getElementById('tbody-autorias')
-
-            let html = '';
-
-            autorias.forEach( autoria => {
-                html += `
-                    <tr>
-                        <td>
-                            ${autoria.autor.nombre} ${autoria.autor.apellido}
-                        </td>
-                        <td>
-                            ${autoria.autor.nacionalidad ?? '-'}
-                        </td>
-                        <td>
-                            ${autoria.libro.titulo}
-                        </td>
-                        <td>
-                            ${autoria.libro.idioma ?? '-'}
-                        </td>
-                        <td class="d-flex gap-2">
-                            <button class="btn btn-primary btn-sm" title="Actualizar">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm" title="Eliminar">
-                                <i class="bi bi-trash-fill"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `
-            })
-            bodyAutorias.innerHTML = html
-            console.log(bodyAutorias)
-
-        }
-    </script>
+@section('scripts')
+@include('autorias.scripts')
 @endsection
