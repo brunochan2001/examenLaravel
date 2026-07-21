@@ -39,6 +39,24 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-4">
+                    <div class="card text-center border-warning mb-3">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Total de Reservas</h6>
+                            <h2 class="card-title text-warning" id="total-reservas">...</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card text-center border-warning mb-3">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Total de Socios</h6>
+                            <h2 class="card-title text-warning" id="total-socios">...</h2>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -49,19 +67,25 @@
 
     async function cargarResumen() {
         try {
-            const [resLibros, resAutores, resAutorias] = await Promise.all([
+            const [resLibros, resAutores, resAutorias, resReservas, resSocios] = await Promise.all([
                 fetch('/api/libros'),
                 fetch('/api/autores'),
                 fetch('/api/autorias'),
+                fetch('/api/reservas'),
+                fetch('/api/socios')
             ])
 
             const libros = await resLibros.json()
             const autores = await resAutores.json()
             const autorias = await resAutorias.json()
+            const reservas = await resReservas.json()
+            const socios = await resSocios.json()
 
             document.getElementById('total-libros').innerText = libros.length
             document.getElementById('total-autores').innerText = autores.length
             document.getElementById('total-autorias').innerText = autorias.length
+            document.getElementById('total-reservas').innerText = reservas.length
+            document.getElementById('total-socios').innerText = socios.length
         } catch (error) {
             console.error('Error al cargar el resumen:', error)
         }
